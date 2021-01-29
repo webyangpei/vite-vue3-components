@@ -1,22 +1,35 @@
-import { defineComponent, ref, toRefs } from 'vue'
+import {defineComponent, reactive, SetupContext} from 'vue'
 
-const Hello = () => {
-	let count = ref(0);
-	const addCount = () => {
-		console.log(++count.value)
-		count = ref(++count.value)
-		console.log(count.value, 999)
+const Hello = defineComponent({
+	props: {
+		msg: {
+			type: String,
+			default: ''
+		},
+		onLoad: {
+			type: Function
+		}
+	},
+	setup(props, {emit}: SetupContext) {
+		let count = reactive({ value: 0 });
+		const { msg } = reactive(props)
+		const emitEvent: (...args: any[]) => void = (...args: any[]) => {
+			emit('load', count.value)
+		}
+		const addCount = () => {
+			count.value = ++count.value
+			emitEvent()
+		}
+		const authorization = false
+
+		return () => <>
+			<h1>{msg}</h1>
+			<button onClick={addCount}>count is: {count.value}</button>
+			<span>{authorization ? '是' : '否'}</span>
+			<div> 测试一下这是什么{count.value}</div>
+		</>
 	}
-	const authorization = false;
-	return (
-		<div>
-			{/*<h1>{ msg }</h1>*/}
-			<button onClick={addCount}>count is: { count.value }</button>
-			<span>{ authorization ? '是' : '否' }</span>
-			<div> 测试一下这是什么{ count.value }</div>
-		</div>
-	)
-};
+})
 
-export default Hello;
+export default Hello
 
