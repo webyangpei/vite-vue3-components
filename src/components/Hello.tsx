@@ -1,20 +1,18 @@
-import {defineComponent, reactive, SetupContext} from 'vue'
+import {h, defineComponent, reactive, SetupContext} from 'vue'
 
 const Hello = defineComponent({
 	props: {
-		msg: {
-			type: String,
-			default: ''
-		},
+		msg: String,
 		onLoad: {
 			type: Function
 		}
 	},
 	setup(props, {emit}: SetupContext) {
 		let count = reactive({ value: 0 });
-		const { msg } = reactive(props)
+		const { msg, onLoad } = reactive(props);
 		const emitEvent: (...args: any[]) => void = (...args: any[]) => {
-			emit('load', count.value)
+			(onLoad as Function)(count.value)
+			// emit('load', count.value)
 		}
 		const addCount = () => {
 			count.value = ++count.value
@@ -22,12 +20,12 @@ const Hello = defineComponent({
 		}
 		const authorization = false
 
-		return () => <>
+		return () => <div>
 			<h1>{msg}</h1>
 			<button onClick={addCount}>count is: {count.value}</button>
 			<span>{authorization ? '是' : '否'}</span>
 			<div> 测试一下这是什么{count.value}</div>
-		</>
+		</div>
 	}
 })
 

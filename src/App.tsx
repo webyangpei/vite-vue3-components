@@ -1,5 +1,5 @@
 import Hello from "./components/Hello";
-import {defineComponent, reactive} from 'vue'
+import {h, defineComponent, reactive} from 'vue'
 
 const imgSrc = './assets/logo.png';
 
